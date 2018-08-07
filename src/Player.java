@@ -53,7 +53,12 @@ public class Player {
 
     private static int parseNumberFrom(String input) {
         try {
-            return Integer.parseInt(input);
+            int number = Integer.parseInt(input);
+            if ( number > 0 && number < songsList.length) {
+                return number;
+            } else {
+                return 0;
+            }
         } catch (Exception NumberFormatException) {
             return 0;
         }
