@@ -34,6 +34,5 @@ class Playlist {
         }
         return files;
     }
-
 }
 

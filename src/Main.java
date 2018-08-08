@@ -2,7 +2,7 @@
 import java.util.List;
 import java.util.Scanner;
 
-public class Player {
+public class Main {
 
     private static int playingIndex = 0;
 
@@ -18,8 +18,9 @@ public class Player {
             checkIfNowPlaying(songsList);
             System.out.println("\nEnter your option: ");
             userInput = scanner.nextLine();
-            checkSelectedOption(userInput, songsList.size());
+            checkSelectedOption(userInput, songsList);
         }
+        System.exit(0);
     }
 
 
@@ -29,7 +30,7 @@ public class Player {
         displayControls();
     }
 
-    private static void checkSelectedOption(String input, int listSize) {
+    private static void checkSelectedOption(String input, List<Song> songsList) {
         switch (input) {
             case "p":
                 System.out.println("option p");
@@ -37,7 +38,7 @@ public class Player {
                 break;
             case "s":
                 System.out.println("option s");
-                stopPlaying(playingIndex);
+                stopPlaying(playingIndex, songsList);
                 break;
             case "n":
                 System.out.println("option n");
@@ -48,10 +49,10 @@ public class Player {
                 showDetailedList();
                 break;
             default:
-                playingIndex = parseNumberFrom(input, listSize);
+                playingIndex = parseNumberFrom(input, songsList.size());
                 if (playingIndex != 0) {
                     System.out.println("playing " + playingIndex);
-                    playSong(playingIndex);
+                    playSong(playingIndex, songsList);
                 }
                 break;
         }
@@ -90,8 +91,8 @@ public class Player {
         if (playingIndex != 0) {
             System.out.println("NOW PLAYING: "
                     + playingIndex + ". "
-                    + songsList.get(playingIndex-1).getArtist() + " "
-                    + songsList.get(playingIndex-1).getTitle());
+                    + songsList.get(playingIndex - 1).getArtist() + " "
+                    + songsList.get(playingIndex - 1).getTitle());
         }
     }
 
@@ -101,10 +102,10 @@ public class Player {
         }
     }
 
-    private static void stopPlaying(int song) {
-//        if (song>0) {
-//          songsList.get(song-1).stop();
-//        }
+    private static void stopPlaying(int song, List<Song> songsList) {
+        if (song > 0) {
+            songsList.get(song - 1).stopPlaying();
+        }
     }
 
     private static void pauseSong(int song) {
@@ -113,10 +114,10 @@ public class Player {
 //        }
     }
 
-    private static void playSong(int song) {
-//        if (song>0) {
-//            songsList.get(song-1).play();
-//        }
+    private static void playSong(int song, List<Song> songsList) {
+        if (song > 0) {
+            songsList.get(song - 1).start();
+        }
     }
 
     private static void playNext(int song) {
