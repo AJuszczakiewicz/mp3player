@@ -1,5 +1,7 @@
 import com.mpatric.mp3agic.*;
+import javazoom.jl.player.Player;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 class Song {
@@ -50,4 +52,19 @@ class Song {
     String getPath() {
         return path;
     }
+
+    public void play(){
+        try {
+
+            FileInputStream fis = new FileInputStream(this.path);
+            Player playMp3 = new Player(fis);
+
+            playMp3.play();
+
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
 }
