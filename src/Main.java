@@ -7,6 +7,7 @@ import static java.lang.Math.abs;
 public class Main {
 
     private static int playingIndex = -1;
+    private static boolean showDetailedList = false;
 
     public static void main(String[] args) {
 
@@ -28,7 +29,8 @@ public class Main {
 
     private static void displayMainContent(List<Song> songsList) {
         displayWelcomeMessage();
-        displayList(songsList);
+        if (showDetailedList) showDetailedList(songsList);
+        else displayList(songsList);
         displayControls();
     }
 
@@ -41,7 +43,7 @@ public class Main {
                 playNext(songsList);
                 break;
             case "d":
-                showDetailedList();
+                showDetailedList = !showDetailedList;
                 break;
             default:
                 if (playingIndex >=0){
@@ -57,11 +59,7 @@ public class Main {
     private static int parseNumberFrom(String input, int listSize) {
         try {
             int number = Integer.parseInt(input);
-            if (number > 0 && number <= listSize) {
-                return number;
-            } else {
-                return 0;
-            }
+            return number <= listSize ? number : 0;
         } catch (Exception NumberFormatException) {
             return 0;
         }
@@ -76,7 +74,7 @@ public class Main {
         System.out.println("\nPlease enter one of the options below to enchant your experience:");
         System.out.println("sort - display sorting options");
         System.out.println("<number> - play song");
-        System.out.println("d    - change to detailed list");
+        System.out.println("d    - show/hide detailed list");
         System.out.println("s    - stop song");
         System.out.println("n    - play next song");
         System.out.println("q    - quit program");
@@ -105,7 +103,8 @@ public class Main {
     }
 
     private static void playSong(List<Song> songsList) {
-        songsList.get(playingIndex).start();
+        if (playingIndex != -1)
+                songsList.get(playingIndex).start();
     }
 
     private static void playNext(List<Song> songsList) {
@@ -120,7 +119,13 @@ public class Main {
         }
     }
 
-    private static void showDetailedList() {
+    private static void showDetailedList(List<Song> songsList) {
+        for (int i = 0; i < songsList.size(); i++) {
+            System.out.println(i + 1 + ". "
+                    + songsList.get(i).getArtist() + " "
+                    + songsList.get(i).getTitle() + " "
+                    + songsList.get(i).getAlbum() + " "
+                    + songsList.get(i).getYear());
+        }
     }
-
 }
