@@ -79,6 +79,7 @@ class Song extends Thread {
 
     void stopPlaying() {
         playMp3.close();
+        t.interrupt();
     }
 
 }

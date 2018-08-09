@@ -2,9 +2,11 @@
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Math.abs;
+
 public class Main {
 
-    private static int playingIndex = 0;
+    private static int playingIndex = -1;
 
     public static void main(String[] args) {
 
@@ -25,6 +27,7 @@ public class Main {
 
 
     private static void displayMainContent(List<Song> songsList) {
+        System.out.println("playng index: " + playingIndex);
         displayWelcomeMessage();
         displayList(songsList);
         displayControls();
@@ -33,27 +36,24 @@ public class Main {
     private static void checkSelectedOption(String input, List<Song> songsList) {
         switch (input) {
             case "p":
-                System.out.println("option p");
-                pauseSong(playingIndex);
+                pauseSong();
                 break;
             case "s":
-                System.out.println("option s");
-                stopPlaying(playingIndex, songsList);
+                stopPlaying(songsList);
                 break;
             case "n":
-                System.out.println("option n");
-                playNext(playingIndex);
+                playNext(songsList);
                 break;
             case "d":
-                System.out.println("option d");
                 showDetailedList();
                 break;
             default:
-                playingIndex = parseNumberFrom(input, songsList.size());
-                if (playingIndex != 0) {
-                    System.out.println("playing " + playingIndex);
-                    playSong(playingIndex, songsList);
+                if (playingIndex >=0){
+                    songsList.get(playingIndex).stopPlaying();
                 }
+                playingIndex = abs(parseNumberFrom(input, songsList.size())) - 1;
+                System.out.println("playing " + playingIndex);
+                playSong(songsList);
                 break;
         }
     }
@@ -88,11 +88,11 @@ public class Main {
     }
 
     private static void checkIfNowPlaying(List<Song> songsList) {
-        if (playingIndex != 0) {
+        if (playingIndex != -1) {
             System.out.println("NOW PLAYING: "
-                    + playingIndex + ". "
-                    + songsList.get(playingIndex - 1).getArtist() + " "
-                    + songsList.get(playingIndex - 1).getTitle());
+                    + (playingIndex + 1) + ". "
+                    + songsList.get(playingIndex).getArtist() + " "
+                    + songsList.get(playingIndex).getTitle());
         }
     }
 
@@ -102,31 +102,38 @@ public class Main {
         }
     }
 
-    private static void stopPlaying(int song, List<Song> songsList) {
-        if (song > 0) {
-            songsList.get(song - 1).stopPlaying();
+    private static void stopPlaying(List<Song> songsList) {
+        if (playingIndex >= 0) {
+            songsList.get(playingIndex).stopPlaying();
+            playingIndex = -1;
+            prevSong = -1;
         }
     }
 
-    private static void pauseSong(int song) {
-//        if (song>0) {
-//            songsList.get(song-1).pause();
-//        }
+    private static void pauseSong() {
     }
 
-    private static void playSong(int song, List<Song> songsList) {
-        if (song > 0) {
-            songsList.get(song - 1).start();
+    private static void playSong(List<Song> songsList) {
+        if (playingIndex >= 0 && prevSong >=0) {
+            songsList.get(prevSong).stopPlaying();
         }
+        songsList.get(playingIndex).start();
+
     }
 
-    private static void playNext(int song) {
-//        if (song>0) {
-//            songsList.get(song-1).stop();
-//        }
-//        songsList.get(song).play();
+    private static void playNext(List<Song> songsList) {
+        if (playingIndex >= 0) {
+            songsList.get(playingIndex).stopPlaying();
+        }
+        if (playingIndex < songsList.size() - 1) {
+            songsList.get(++playingIndex).start();
+        } else if (playingIndex == songsList.size()) {
+            playingIndex = 0;
+            songsList.get(playingIndex).start();
+        }
     }
 
     private static void showDetailedList() {
     }
+
 }
