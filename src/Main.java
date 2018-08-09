@@ -27,7 +27,6 @@ public class Main {
 
 
     private static void displayMainContent(List<Song> songsList) {
-        System.out.println("playng index: " + playingIndex);
         displayWelcomeMessage();
         displayList(songsList);
         displayControls();
@@ -35,9 +34,6 @@ public class Main {
 
     private static void checkSelectedOption(String input, List<Song> songsList) {
         switch (input) {
-            case "p":
-                pauseSong();
-                break;
             case "s":
                 stopPlaying(songsList);
                 break;
@@ -81,7 +77,6 @@ public class Main {
         System.out.println("sort - display sorting options");
         System.out.println("<number> - play song");
         System.out.println("d    - change to detailed list");
-        System.out.println("p    - pause song");
         System.out.println("s    - stop song");
         System.out.println("n    - play next song");
         System.out.println("q    - quit program");
@@ -106,19 +101,11 @@ public class Main {
         if (playingIndex >= 0) {
             songsList.get(playingIndex).stopPlaying();
             playingIndex = -1;
-            prevSong = -1;
         }
-    }
-
-    private static void pauseSong() {
     }
 
     private static void playSong(List<Song> songsList) {
-        if (playingIndex >= 0 && prevSong >=0) {
-            songsList.get(prevSong).stopPlaying();
-        }
         songsList.get(playingIndex).start();
-
     }
 
     private static void playNext(List<Song> songsList) {
