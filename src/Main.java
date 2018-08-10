@@ -1,4 +1,4 @@
-
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,10 +11,15 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Playlist playlist = new Playlist("./playlist");
+        String playlistPath = getPlaylistFolderPath("playlist");
+        Playlist playlist = new Playlist(playlistPath);
         Scanner scanner = new Scanner(System.in);
         List<Song> songsList = playlist.createList();
         String userInput = "";
+
+        //Song test = songsList.get(0);
+        //test.setArtist("test");
+
 
         while (!userInput.equals("q")) {
             displayMainContent(songsList);
@@ -32,6 +37,12 @@ public class Main {
         if (showDetailedList) showDetailedList(songsList);
         else displayList(songsList);
         displayControls();
+    }
+
+    private static String getPlaylistFolderPath(String folderName){
+        String workingDir = System.getProperty("user.dir");
+        workingDir = Paths.get(workingDir, folderName).toString();
+        return workingDir;
     }
 
     private static void checkSelectedOption(String input, List<Song> songsList) {
